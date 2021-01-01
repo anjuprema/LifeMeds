@@ -1,0 +1,34 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!--DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"-->
+<html lang="en">
+<head>
+<title>LifeMeds</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../css/homePageStyles.css">
+<link rel="stylesheet" href="../../css/formStyles.css">
+<link rel="stylesheet" href="../../css/footer.css">
+<style>
+	.errorMsg{
+		color:red;
+	}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>LifeMeds</h1>
+  <!-- <p>A website created by me.</p> -->
+  <div style="float:right;">Welcome ${welcomeMsg}</div>
+</div>
+
+<div class="navbar">
+  <a href="/admin/createCategory">Create Category</a>
+  <a href="/admin/listCategory">List Category</a>
+  <a href="/admin/createSeller">Create Seller</a>
+  <a href="/admin/listSeller">List Seller</a>
+  <a href="/admin/createMedicine">Create Medicine</a>
+  <a href="/admin/listMedicine">List Medicine</a>
+  <a href="/admin/logout" class="right">Logout</a>
+  <a href="/admin/changePassword" class="right">Change Password</a>
+</div>
