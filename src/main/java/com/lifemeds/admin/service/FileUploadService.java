@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class FileUploadService {
         try {
         	uploadDir = System.getProperty("user.home");
         	//System.out.println("upload b4 dir:"+uploadDir);
+        	System.out.println(System.getProperty("user.dir"));
         	uploadDir = uploadDir + File.separator + uploadFolder;            
         	if(!Files.isDirectory(Paths.get(uploadDir))) {
             	Files.createDirectory(Paths.get(uploadDir));

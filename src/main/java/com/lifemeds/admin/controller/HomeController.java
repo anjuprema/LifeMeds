@@ -25,7 +25,7 @@ public class HomeController {
 	public ModelAndView showLoginForm(User user, HttpSession session) {
 		ModelAndView mv = new ModelAndView();
 		if(user.getUserName() != null && user.getUserPassword() != null && session.getAttribute("user") == null) {
-			User doesExist = this.userRepo.findByUserName(user.getUserName());
+			User doesExist = this.userRepo.findByUserNameAndIsAdmin(user.getUserName(), true);
 			if(doesExist != null) {
 				/*if login uname & password matches, allow login and keep session*/
 				if(doesExist.getUserPassword().equals(user.getUserPassword())) {
