@@ -69,23 +69,26 @@ public class SellerController {
 	@RequestMapping(value="/listSeller")
 	public ModelAndView listSeller(HttpSession session) {
 		ModelAndView mv = new ModelAndView();
-		List <Seller> sellerList = new ArrayList <Seller>();
-		sellerList = sellerRepo.findAll();
-		String gridData = "";
-		for(Seller seller: sellerList) {
-			gridData = gridData.concat("<tr>"+
-					"<td width='60%'>"+ seller.getSellerName() +"</td>"+
-					"<td><a href='/admin/editSeller?id="+ seller.getIdSeller() +"'><img src='../../icons/edit.png'></a>"+
-					"&nbsp;&nbsp;<a onClick='confirmDelete("+ seller.getIdSeller() +");'><img src='../../icons/delete.png'></a></td>"+
-					"</tr>");
-		}		
-		mv.addObject("data",gridData);
-		if(session.getAttribute("user") != null) {
-			sessionUser = (User) session.getAttribute("user");
-			mv.addObject("welcomeMsg", sessionUser.getUserName());
-		}
 		mv.setViewName("ListSeller");
 		return mv;
+//		List <Seller> sellerList = new ArrayList <Seller>();
+//		sellerList = sellerRepo.findAll();
+//		String gridData = "";
+//		for(Seller seller: sellerList) {
+//			gridData = gridData.concat("<tr>"+
+//					"<td width='60%'>"+ seller.getSellerName() +"</td>"+
+//					"<td><a href='/admin/editSeller?id="+ seller.getIdSeller() +"'><img src='../../icons/edit.png'></a>"+
+//					"&nbsp;&nbsp;<a onClick='confirmDelete("+ seller.getIdSeller() +");'><img src='../../icons/delete.png'></a></td>"+
+//					"</tr>");
+//		}	
+//		System.out.println(gridData);
+//		mv.addObject("data",gridData);
+//		if(session.getAttribute("user") != null) {
+//			sessionUser = (User) session.getAttribute("user");
+//			mv.addObject("welcomeMsg", sessionUser.getUserName());
+//		}
+//		mv.setViewName("ListSeller");
+//		return mv;
 	}
 	
 	@RequestMapping(value="/editSeller")

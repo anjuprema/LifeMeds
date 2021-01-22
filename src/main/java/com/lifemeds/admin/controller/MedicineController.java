@@ -104,29 +104,32 @@ public class MedicineController {
 	@RequestMapping(value="/listMedicine")
 	public ModelAndView listMedicine(HttpSession session) {
 		ModelAndView mv = new ModelAndView();
-		List <Medicine> medicineList = new ArrayList <Medicine>();
-		medicineList = medicineRepo.findAll();
-		String gridData = "";
-		for(Medicine medicine: medicineList) {
-			gridData = gridData.concat("<tr>"+
-					"<td width='20%'>"+ medicine.getMedicineName() +"</td>"+
-					"<td width='10%'>"+ medicine.getMedicinePrice() +"</td>"+
-					"<td width='15%'>"+ medicine.getCategory().getCategoryName() +"</td>"+
-					"<td width='15%'>"+ medicine.getSeller().getSellerName() +"</td>"+
-					"<td width='25%'>"+ medicine.getMedicineDescription() +"</td>"+
-					"<td> <a href='/admin/updateStatus?id="+ medicine.getIdMedicine() +"'>"+ 
-						(medicine.isEnabled() ? "<img src='../../icons/active.png'>" : "<img src='../../icons/inactive.png'>")+"</a>"+
-					"&nbsp;&nbsp;<a href='/admin/editMedicine?id="+ medicine.getIdMedicine() +"'><img src='../../icons/edit.png'></a>"+
-					"&nbsp;&nbsp;<a onClick='confirmDelete("+ medicine.getIdMedicine() +");'><img src='../../icons/delete.png'></a></td>"+
-					"</tr>");
-		}		
-		mv.addObject("data",gridData);
-		if(session.getAttribute("user") != null) {
-			sessionUser = (User) session.getAttribute("user");
-			mv.addObject("welcomeMsg", sessionUser.getUserName());
-		}
 		mv.setViewName("ListMedicine");
 		return mv;
+//		List <Medicine> medicineList = new ArrayList <Medicine>();
+//		medicineList = medicineRepo.findAll();
+//		String gridData = "";
+//		for(Medicine medicine: medicineList) {
+//			gridData = gridData.concat("<tr>"+
+//					"<td width='20%'>"+ medicine.getMedicineName() +"</td>"+
+//					"<td width='10%'>"+ medicine.getMedicinePrice() +"</td>"+
+//					"<td width='15%'>"+ medicine.getCategory().getCategoryName() +"</td>"+
+//					"<td width='15%'>"+ medicine.getSeller().getSellerName() +"</td>"+
+//					"<td width='25%'>"+ medicine.getMedicineDescription() +"</td>"+
+//					"<td> <a href='/admin/updateStatus?id="+ medicine.getIdMedicine() +"'>"+ 
+//						(medicine.isEnabled() ? "<img src='../../icons/active.png'>" : "<img src='../../icons/inactive.png'>")+"</a>"+
+//					"&nbsp;&nbsp;<a href='/admin/editMedicine?id="+ medicine.getIdMedicine() +"'><img src='../../icons/edit.png'></a>"+
+//					"&nbsp;&nbsp;<a onClick='confirmDelete("+ medicine.getIdMedicine() +");'><img src='../../icons/delete.png'></a></td>"+
+//					"</tr>");
+//		}	
+//		System.out.println(gridData);
+//		mv.addObject("data",gridData);
+//		if(session.getAttribute("user") != null) {
+//			sessionUser = (User) session.getAttribute("user");
+//			mv.addObject("welcomeMsg", sessionUser.getUserName());
+//		}
+//		mv.setViewName("ListMedicine");
+//		return mv;
 	}
 	
 	@RequestMapping(value="/editMedicine")

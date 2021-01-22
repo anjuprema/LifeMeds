@@ -27,7 +27,8 @@ function confirmDelete(categoryId){
 	 }
 }
 </script>
-
+<script src="../../js/angular.min.js"></script>
+<div ng-app="LifeMeds" ng-controller="categoryCtrl" >
 <input type="text" id="myInput" onkeyup="filterCategory()" placeholder="Search for categories.." title="Type in a category name">
 
 <table id="myTable">
@@ -35,7 +36,26 @@ function confirmDelete(categoryId){
     <th style="width:100%;">Category Name:</th>
     <th style="width:100%;">Manage</th>
   </tr>
-  	${data}
+  <tr ng-repeat="category in data">
+	<td width='60%'>{{category.categoryName}}</td>
+	<td>
+		<a href="/admin/editCategory?id={{category.idCategory}}"><img src='../../icons/edit.png'></a>&nbsp;&nbsp;
+		<a href="/admin/deleteCategory?id={{category.idCategory}}"><img src='../../icons/delete.png'></a>
+	</td>
+  </tr>	
 </table>
+</div>
+<!-- onClick='confirmDelete({{category.categoryId}});' -->
+<script>
+var app = angular.module('LifeMeds', []);
+app.controller('categoryCtrl', function($scope, $http) {
+  $http.get("/client/listCategory")
+  .then(function (response) {
+	  $scope.data = response.data;
+	});
+	  
+});
+</script>
+
 <%@ include file="/HtmlPages/footer.html"%>
 

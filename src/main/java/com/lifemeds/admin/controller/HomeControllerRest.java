@@ -69,14 +69,12 @@ public class HomeControllerRest {
 	
 	@GetMapping("/listSeller")
 	public List<Seller> listSeller(HttpServletResponse response){
-		//response.addHeader("Access-Control-Allow-Origin", "*");
 		return sellerRepo.findAll();
 	}
 	
 	@GetMapping("/listMedicine")
 	public List<Medicine> listMedicine(HttpServletResponse response, @RequestParam(required=false) Integer categoryId,
-			@RequestParam(required=false) Integer sellerId, @RequestParam(required=false) String title){
-		//response.addHeader("Access-Control-Allow-Origin", "*");
+			@RequestParam(required=false) Integer sellerId, @RequestParam(required=false) String title, @RequestParam(required=false) Boolean getAll){
 		if(categoryId != null) {
 			Category cat = new Category();
 			cat.setIdCategory(categoryId);
@@ -87,14 +85,15 @@ public class HomeControllerRest {
 			return medicineRepo.findBySellerAndIsEnabled(sell, true);
 		}else if(title != null){
 			return medicineRepo.findByMedicineNameContainsAndIsEnabled(title, true);
-		} else {		
+		} else if(getAll!=null && getAll){
+			return medicineRepo.findAll();
+		}else {		
 			return medicineRepo.findByisEnabled(true);
 		}			
 	}
 	
 	@GetMapping("/medicineDetail")
 	public Medicine getMedicineDetail(HttpServletResponse response, @RequestParam Integer medicineId) {
-		//response.addHeader("Access-Control-Allow-Origin", "*");
 		return medicineRepo.findById(medicineId).orElse(new Medicine());
 	}
 	
@@ -131,76 +130,44 @@ public class HomeControllerRest {
 	
 	@PostMapping("/purchase")
 	public String makePurchase(@RequestBody String data) throws ParseException, JsonMappingException, JsonProcessingException {
-		System.out.println(data);
-		JSONObject userInfo = new JSONObject();
-		JSONObject medicineList = new JSONObject();
-		JSONObject medicineCount = new JSONObject();
-		JSONObject paymentInfo = new JSONObject();
+		JSONObject rootJSON = (JSONObject) new JSONParser().parse(data);
+ 				
+		JSONArray medicineCount = (JSONArray) rootJSON.get("medicineCount");
+				
+		JSONObject userInfo = (JSONObject) rootJSON.get("userInfo");
 		
-		JSONParser jsonParser = new JSONParser();
-		Object obj = jsonParser.parse(data);
-
-        JSONArray userList = (JSONArray) obj;
-        userInfo = (JSONObject) ((JSONObject) userList.get(0)).get("userInfo");
-		System.out.println(userInfo);
+		JSONObject paymentInfo = (JSONObject) rootJSON.get("paymentInfo");
 		
-//		JSONArray medicineArray = (JSONArray) obj;
-//		medicineList = (JSONObject) ((JSONObject) medicineArray.get(0)).get("medicineList");
-//		System.out.println(medicineList);
-//		
-//		JSONArray countArray = (JSONArray) obj;
-//		medicineCount = (JSONObject) ((JSONObject) countArray.get(0)).get("medicineCount");
-//		System.out.println(medicineCount);
+		Purchase purchase = new Purchase();
+		User loggedInUser = userRepo.findByUserName((String) userInfo.get("userName"));
+		purchase.setUser(loggedInUser);
+		purchase.setAmountPayed(Double.valueOf(String.valueOf(paymentInfo.get("amountPayed"))));
+		purchase.setDeliveryAddress(String.valueOf(paymentInfo.get("deliveryAddress")));
+		purchaseRepo.save(purchase);
+		//System.out.println(purchase);
 		
-		JSONArray paymentDetail = (JSONArray) obj;
-		paymentInfo = (JSONObject) ((JSONObject) paymentDetail.get(0)).get("paymentInfo");
-		System.out.println(paymentInfo);
+		JSONArray medicineList = (JSONArray) rootJSON.get("medicineList");
+		for(Object medicine : medicineList.toArray()) {
+			JSONObject medicineData = (JSONObject)medicine;
+			
+			Medicine eachMedicine = new Medicine();
+			eachMedicine.setIdMedicine(Integer.valueOf(String.valueOf(medicineData.get("idMedicine"))));
+			ProductPurchase pPurchase = new ProductPurchase();
+			pPurchase.setPurchase(purchase);
+			pPurchase.setMedicine(eachMedicine);
+			pPurchase.setItemCount(Integer.valueOf(String.valueOf(medicineCount.toArray()[Integer.valueOf(String.valueOf(medicineData.get("idMedicine")))])));
+			pPurchase.setProductPrice(Double.valueOf(String.valueOf(medicineData.get("medicinePrice"))));
+			productPurchaseRepo.save(pPurchase);
+			//System.out.println(pPurchase);
+		}	
 		
-//		ObjectMapper objectmapper = new ObjectMapper();
-//		objectmapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//		//User user = objectmapper.readValue(data, User.class);
-//		Medicine medlist = objectmapper.readValue((String) userList.get(0), Medicine.class);
-//		System.out.println(medlist);
-		
-//		System.out.println(data);
-//		ObjectMapper objectmapper = new ObjectMapper();
-//		objectmapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//		User user = objectmapper.readValue(data, User.class);
-//		System.out.println("user");
-//		System.out.println(user);
-//		objectmapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//		List <Medicine> med = new ArrayList<Medicine>();
-//		med = (List<Medicine>) objectmapper.readValue(data, Medicine.class);
-//		System.out.println("medicine");
-//		System.out.println(med);
-		
-//		Purchase test = new Purchase();
-//		User user = new User();
-//		user.setUserId(2);
-//		test.setUser(user);
-//		test.setAmountPayed(44.00);
-//		test.setDeliveryAddress("Sreevilas, Udayagiri");
-//		purchaseRepo.save(test);
-//		
-//		Medicine med = new Medicine();
-//		med.setIdMedicine(26);
-//		ProductPurchase pp = new ProductPurchase();
-//		pp.setPurchase(test);
-//		pp.setMedicine(med);
-//		pp.setItemCount(2);
-//		pp.setProductPrice(44.00);
-//		productPurchaseRepo.save(pp);
 		return "200";
 	}
 	
-	@GetMapping("/getSettings")
-	public String getSettings(HttpServletResponse response) {	
-		//response.addHeader("Access-Control-Allow-Origin", "*");
-		return "";
-//		String str = "{\"fileDestination\":\""+ 
-//							System.getProperty("user.home") + File.separator + uploadFolder + File.separator +"\",\"fileSeperator\":\""+ File.separator +"\"}";
-//		str = str.replace("\\", "\\\\");
-//		return str;
+	@GetMapping("/orderHistory")
+	public List<Purchase> getOrderHistory(@RequestParam(required = false) String userName){
+		User user = userRepo.findByUserName(userName);	
+		return purchaseRepo.findByUserOrderByPurchaseDateDesc(user);
 	}
 
 }

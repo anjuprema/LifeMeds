@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -34,9 +33,9 @@ public class Purchase {
 	private String deliveryAddress;
 	
 	@Column(name="purchase_date")
-	private Date purchaseDate;
+	private Date purchaseDate = new Date();
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "purchase")
+	@OneToMany(mappedBy = "purchase")	
 	private List<ProductPurchase> productPurchase;
 
 	public int getIdPurchase() {
@@ -77,12 +76,17 @@ public class Purchase {
 
 	public void setPurchaseDate(Date purchaseDate) {
 		this.purchaseDate = purchaseDate;
-	}
+	}	
+
+	public void setProductPurchase(List<ProductPurchase> productPurchase) {
+		this.productPurchase = productPurchase;
+	}	
 
 	@Override
 	public String toString() {
 		return "Purchase [idPurchase=" + idPurchase + ", user=" + user + ", amountPayed=" + amountPayed
 				+ ", deliveryAddress=" + deliveryAddress + ", purchaseDate=" + purchaseDate + "]";
 	}
+
 	
 }

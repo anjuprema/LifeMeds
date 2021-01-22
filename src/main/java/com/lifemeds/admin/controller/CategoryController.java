@@ -68,24 +68,26 @@ public class CategoryController {
 	@RequestMapping(value="/listCategory")
 	public ModelAndView listCategory(HttpSession session) {
 		ModelAndView mv = new ModelAndView();
-		List <Category> catList = new ArrayList <Category>();
-		catList = categoryRepo.findAll();
-		String gridData = "";
-		for(Category cat: catList) {
-			gridData = gridData.concat("<tr>"+
-					"<td width='60%'>"+ cat.getCategoryName() +"</td>"+
-					"<td><a href='/admin/editCategory?id="+ cat.getIdCategory() +"'><img src='../../icons/edit.png'></a>"+
-					"&nbsp;&nbsp;<a onClick='confirmDelete("+ cat.getIdCategory() +");'><img src='../../icons/delete.png'></a></td>"+
-					"</tr>");
-		}
-		//href='/admin/deleteCategory?id="+ cat.getIdCategory() +"'
-		mv.addObject("data",gridData);
-		if(session.getAttribute("user") != null) {
-			sessionUser = (User) session.getAttribute("user");
-			mv.addObject("welcomeMsg", sessionUser.getUserName());
-		}
 		mv.setViewName("ListCategory");
 		return mv;
+//		List <Category> catList = new ArrayList <Category>();
+//		catList = categoryRepo.findAll();
+//		String gridData = "";
+//		for(Category cat: catList) {
+//			gridData = gridData.concat("<tr>"+
+//					"<td width='60%'>"+ cat.getCategoryName() +"</td>"+
+//					"<td><a href='/admin/editCategory?id="+ cat.getIdCategory() +"'><img src='../../icons/edit.png'></a>"+
+//					"&nbsp;&nbsp;<a onClick='confirmDelete("+ cat.getIdCategory() +");'><img src='../../icons/delete.png'></a></td>"+
+//					"</tr>");
+//		}
+//		//href='/admin/deleteCategory?id="+ cat.getIdCategory() +"'
+//		mv.addObject("data",gridData);
+//		if(session.getAttribute("user") != null) {
+//			sessionUser = (User) session.getAttribute("user");
+//			mv.addObject("welcomeMsg", sessionUser.getUserName());
+//		}
+		//mv.setViewName("ListCategory");
+		//return mv;
 	}
 	
 	@RequestMapping(value="/editCategory")

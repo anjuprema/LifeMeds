@@ -19,7 +19,7 @@ public class ProductPurchase {
 	@Column(name="id_product_purchase")
 	private int idProductPurchase;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="id_purchase")
 	private Purchase purchase;
 	
