@@ -72,6 +72,25 @@
 			<version>2.7.0</version>
 		</dependency>
 		<!-- junit-jupiter-api -->
+		<!-- selenium dependency -->
+		<dependency>
+    		<groupId>org.assertj</groupId>
+    		<artifactId>assertj-core</artifactId>
+    		<version>1.5.0</version>
+    		<scope>test</scope>
+		</dependency>
+		<dependency>
+      		<groupId>org.seleniumhq.selenium</groupId>
+      		<artifactId>selenium-java</artifactId>
+      		<version>3.9.0</version>
+    	</dependency>
+    	<dependency>
+	    	<groupId>org.testng</groupId>
+	    	<artifactId>testng</artifactId>
+	    	<version>7.3.0</version>
+	    	<scope>test</scope>
+		</dependency>
+		<!-- selenium dependency -->
 	</dependencies>
 	<build>
 		<plugins>
